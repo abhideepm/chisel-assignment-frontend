@@ -8,7 +8,17 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <Container>
-        <h1>Todo App</h1>
+        <h1
+          style={{
+            textAlign: "center",
+            fontSize: "30px",
+            fontWeight: "bold",
+            marginTop: "20px",
+            marginBottom: "20px"
+          }}
+        >
+          Todo App
+        </h1>
         <Boards />
       </Container>
     </QueryClientProvider>

@@ -7,7 +7,7 @@ const Boards = () => {
   const queryClient = useQueryClient();
   const { data: boards, isLoading: boardsLoading } = useQuery("boards", () => {
     return httpClient
-      .get<{ title: string }[]>("v1/board")
+      .get<{ title: string; id: string }[]>("v1/board")
       .then((res) => res.data);
   });
 
@@ -29,19 +29,18 @@ const Boards = () => {
     await addBoardMutation.mutateAsync(`Board ${boards.length + 1}`);
   };
 
-  console.log("boards", boards);
-
   return (
     <div>
-      <h3>Boards</h3>
-      <Button onClick={handleAddBoard}>Add Board</Button>
+      <Button onClick={handleAddBoard} floated="right" color="green">
+        Add Board
+      </Button>
       {boardsLoading ? (
         <div>Loading...</div>
       ) : (
         <Tab
           panes={boards?.map((board) => ({
             menuItem: board.title,
-            render: () => <Board />
+            render: () => <Board boardId={board.id} />
           }))}
         />
       )}
