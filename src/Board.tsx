@@ -48,6 +48,17 @@ const Board = ({ boardId }: { boardId: string }) => {
     }
   );
 
+  const deleteBoardMutation = useMutation(
+    (id: string) => {
+      return httpClient.delete(`v1/board/${id}`);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries(`boards`);
+      }
+    }
+  );
+
   const { data: todos, isLoading: todosLoading } = useQuery(
     `tasks_${boardId}`,
     () => {
@@ -88,6 +99,13 @@ const Board = ({ boardId }: { boardId: string }) => {
 
   return (
     <>
+      <Button
+        onClick={() => deleteBoardMutation.mutate(boardId)}
+        style={{ marginBottom: "20px", marginTop: "20px" }}
+        color="red"
+      >
+        Delete Board
+      </Button>
       <Grid columns={3} divided>
         <Grid.Row>
           <Grid.Column>

@@ -26,7 +26,13 @@ const Boards = () => {
     if (!boards) {
       return;
     }
-    await addBoardMutation.mutateAsync(`Board ${boards.length + 1}`);
+    const newBoardName = `Board ${
+      boards.length === 0
+        ? 1
+        : +boards[boards.length - 1].title.split(" ")[1] + 1
+    }`;
+    console.log("newBoardName", newBoardName);
+    await addBoardMutation.mutateAsync(newBoardName);
   };
 
   return (
