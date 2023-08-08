@@ -1,6 +1,13 @@
 import { useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { Button, Container, Grid, Input, Item } from "semantic-ui-react";
+import {
+  Button,
+  Confirm,
+  Container,
+  Grid,
+  Input,
+  Item
+} from "semantic-ui-react";
 import Task from "./Task";
 import { httpClient } from "./httpClient";
 
@@ -12,6 +19,7 @@ type Todo = {
 
 const Board = ({ boardId }: { boardId: string }) => {
   const [todoName, setTodoName] = useState("");
+  const [showConfirm, setShowConfirm] = useState(false);
   const queryClient = useQueryClient();
 
   const addTaskMutation = useMutation(
@@ -33,6 +41,7 @@ const Board = ({ boardId }: { boardId: string }) => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries(`tasks_${boardId}`);
+        setShowConfirm(false);
       }
     }
   );
@@ -97,15 +106,27 @@ const Board = ({ boardId }: { boardId: string }) => {
     );
   }, [todos]);
 
+  const handleCancelDelete = () => {
+    setShowConfirm(false);
+  };
+
   return (
     <>
       <Button
-        onClick={() => deleteBoardMutation.mutate(boardId)}
+        onClick={() => setShowConfirm(true)}
         style={{ marginBottom: "20px", marginTop: "20px" }}
         color="red"
       >
         Delete Board
       </Button>
+      <Confirm
+        open={showConfirm}
+        onCancel={handleCancelDelete}
+        onConfirm={() => deleteBoardMutation.mutate(boardId)}
+        content="Are you sure you want to delete this board?"
+        cancelButton="Cancel"
+        confirmButton="Delete"
+      />
       <Grid columns={3} divided>
         <Grid.Row>
           <Grid.Column>

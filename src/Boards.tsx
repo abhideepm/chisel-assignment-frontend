@@ -31,7 +31,6 @@ const Boards = () => {
         ? 1
         : +boards[boards.length - 1].title.split(" ")[1] + 1
     }`;
-    console.log("newBoardName", newBoardName);
     await addBoardMutation.mutateAsync(newBoardName);
   };
 
